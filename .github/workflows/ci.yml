@@ -1,0 +1,40 @@
+name: CI / Enterprise Quality & Build Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+# Cancel in-progress runs for the same branch/PR to save resources
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-and-build:
+    name: Typecheck, Test & Production Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js v20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci || npm install
+
+      - name: TypeScript Compiler Check (Typecheck)
+        run: npm run typecheck
+
+      - name: Automated Unit & Integration Tests (Vitest)
+        run: npm run test
+
+      - name: Production Bundle & Server Compilation
+        run: npm run build

@@ -1,0 +1,38 @@
+# Render.com Infrastructure-as-Code Manifest (render.yaml)
+# Production Deployment for XLNC Exotic Homes Inventory & ERP Portal
+
+services:
+  - type: web
+    name: xlnc-inventory-erp
+    runtime: node
+    plan: starter
+    region: oregon
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: xlnc-uploads
+      mountPath: /var/data/uploads
+      sizeGB: 10
+    envVars:
+      - key: STORAGE_PATH
+        value: /var/data/uploads
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+        # Optional: Provide your PostgreSQL connection string (Supabase, Neon, RDS, Cloud SQL)
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+        # Optional: Firebase Project ID (e.g., ai-studio-xlncexotichomes-67a6b6f8-ba91-4891-b351-c9601a3164d9)
+      - key: APP_URL
+        sync: false
+        # Optional: Set to your public Render service URL (e.g., https://xlnc-inventory-erp.onrender.com)

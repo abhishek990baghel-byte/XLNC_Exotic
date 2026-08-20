@@ -1,0 +1,10 @@
+{
+  "name": "XLNC Exotic Homes",
+  "description": "Inventory Management System for XLNC Exotic Homes. Features material tracking, barcode scanning, POS/sales, purchasing, and stock ledger.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
